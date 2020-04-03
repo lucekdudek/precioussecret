@@ -1,0 +1,12 @@
+---
+version: '3.5'
+
+services:
+  precious:
+    image: lucekdudek/precious-secret-image:latest
+    command: python manage.py runserver 0.0.0.0:8787
+    volumes:
+      - './:/opt/precioussecret/'
+    working_dir: /opt/precioussecret/
+    ports:
+      - '8787:8787'
