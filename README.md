@@ -1,6 +1,6 @@
 # Precious Secret
 
-solution to a task given during recruitment process 
+ToDo
 
 ## Getting Started
 
@@ -43,7 +43,12 @@ python manage.py test
 
 ## Deployment
 
-ToDo
+Deploy with heroku
+```shell-script
+heroku config:set SECRET_KEY='secret_key_goes_here'
+heroku config:set DJANGO_SETTINGS_MODULE=precioussecret.production_settings
+heroku run python manage.py createsuperuser
+```
 
 ## Built With
 
