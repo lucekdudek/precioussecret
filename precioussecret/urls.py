@@ -20,4 +20,5 @@ from django.conf.urls import url
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('precioussecret.service.urls')),
+    url(r'^', include('precioussecret.client.urls')),
 ]

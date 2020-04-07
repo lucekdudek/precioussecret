@@ -60,10 +60,10 @@ class AddSecretViewTest(TestCase):
         response = AddSecretView.as_view()(request)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_forbidden(self):
+    def test_unauthorized(self):
         request = self.factory.get('/api/secret/')
         response = AddSecretView.as_view()(request)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_method_not_allowed(self):
         request = self.factory.get('/api/secret/')

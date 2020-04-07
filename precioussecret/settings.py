@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework.authtoken',
 
     'precioussecret.service',
+    'precioussecret.client',
 ]
 
 MIDDLEWARE = [
@@ -124,4 +126,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_URL =  '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
+LOGIN_URL = '/login/'
+
+VALID_FILE_EXTENSIONS = [
+    '.txt', '.rtf', '.pdf', '.odt', '.doc', '.docx', '.ini',
+    '.xls', '.xlsm', '.xlsx', '.ods', '.ppt', '.pptx', '.pps', '.odp', '.key',
+    '.tif', '.tiff', '.svg', '.png', '.jpeg', '.jpg', '.ico', '.gif', '.bmp', '.ai',
+    '.wmv', '.mpg', '.mpeg', '.mp4', '.mp3', '.mpa', '.wav', '.wma', '.wpl'
+]

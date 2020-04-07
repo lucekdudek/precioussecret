@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Precious Secret - Home{% endblock %}
+
+{% block content %}
+
+<h4>Sign in</h4>
+
+{% if user.is_authenticated %}
+    <p>You are signed in as {{ user.username }}!</p>
+{% else %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+    </form>
+{% endif %}
+
+{% endblock %}
