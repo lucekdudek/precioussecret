@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+import django_heroku
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -125,6 +127,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -142,3 +148,6 @@ VALID_FILE_EXTENSIONS = [
     '.tif', '.tiff', '.svg', '.png', '.jpeg', '.jpg', '.ico', '.gif', '.bmp', '.ai',
     '.wmv', '.mpg', '.mpeg', '.mp4', '.mp3', '.mpa', '.wav', '.wma', '.wpl'
 ]
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())

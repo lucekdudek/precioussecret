@@ -25,6 +25,6 @@ def generate_access_code():
 class Secret(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     resource = models.ForeignKey(Resource, on_delete=models.PROTECT)
-    access_name = models.CharField(max_length=32, unique=True, db_index=True, default=generate_access_name)
-    access_code = models.CharField(max_length=16, default=generate_access_code)
+    access_name = models.CharField(max_length=255, unique=True, db_index=True, default=generate_access_name)
+    access_code = models.CharField(max_length=255, default=generate_access_code)
     number_of_accesses = models.IntegerField(default=0)

@@ -10,6 +10,7 @@ from django.utils.translation import ugettext as _
 from django.views import generic
 
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 
 from precioussecret.client.forms import AddSecretForm
 
@@ -44,7 +45,8 @@ class AddSecretView(generic.FormView):
 
         try:
             resource_dict = self.__prepare_resource_dict(form)
-            access_name, access_code = self.__post_secret_to_api(resource_dict, request.user.auth_token)
+            auth_token, created = Token.objects.get_or_create(user=request.user)
+            access_name, access_code = self.__post_secret_to_api(resource_dict, auth_token)
         except ValidationError as e:
             form.add_error(field=None, error=e)
             return self.form_invalid(form)
