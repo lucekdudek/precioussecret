@@ -14,8 +14,14 @@ These instructions will get you a copy of the project up and running on your loc
 
 Init dev server  
 
-```
-ToDo
+```shell-script
+docker-compose pull
+docker-compose up -d
+docker exec -it precioussecret_precious_1 bash
+
+# Inside container
+python manage.py migrate
+python createsuperuser
 ```
 
 Run and call dev server  
@@ -23,6 +29,16 @@ Run and call dev server
 ```shell-script
 docker-compose up -d
 curl -I http://127.0.0.1:8787/
+```
+
+## Running tests
+
+```shell-script
+docker-compose up -d
+docker exec -it precioussecret_precious_1 bash
+
+# Inside container
+python manage.py test
 ```
 
 ## Deployment
