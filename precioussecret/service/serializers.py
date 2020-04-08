@@ -7,6 +7,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
@@ -24,7 +25,9 @@ class ResourceFileField(serializers.FileField):
         """Gets a file and returns its base64 representation.
         """
         if value:
-            return value.url
+            data = default_storage.open(value.path).read()
+            encoded=base64.b64encode(data).decode("utf-8")
+            return encoded
 
     def to_internal_value(self, data):
         """Save file received as base64 and returns path to it.
@@ -58,18 +61,6 @@ class ResourceSerializer(serializers.Serializer):
                 _("`resource` has to contain exactly one of field"),
             )
         return super(ResourceSerializer, self).validate(attrs)
-
-    def to_representation(self, instance):
-        """Returns url representation of resource.
-        """
-        representation = super(ResourceSerializer, self).to_representation(instance)
-        url = representation.get('url')
-        if url:
-            return url
-
-        file = representation.get('file')
-        if file:
-            return file
 
 
 class AddSecretSerializer(serializers.Serializer):

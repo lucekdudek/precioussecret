@@ -97,7 +97,7 @@ class AccessSecretViewTest(TestCase):
         response = AccessSecretView.as_view()(request, **{'access_name': secret.access_name})
         updated_secret = Secret.objects.get(access_name=secret.access_name)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(secret.resource.url, response.data.get('resource'))
+        self.assertEqual(secret.resource.url, response.data.get('resource').get('url'))
         self.assertEqual(secret.number_of_accesses + 1, updated_secret.number_of_accesses)
 
     def test_access_secret_gone(self):
@@ -183,7 +183,7 @@ class AccessSecretViewTest(TestCase):
         response = AccessSecretView.as_view()(request, **{'access_name': secret.access_name})
         updated_secret = Secret.objects.get(access_name=secret.access_name)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(secret.resource.url, response.data.get('resource'))
+        self.assertEqual(secret.resource.url, response.data.get('resource').get('url'))
         self.assertEqual(secret.number_of_accesses + 1, updated_secret.number_of_accesses)
         self.assertEqual(secret.created, updated_secret.created)
         self.assertEqual(secret.resource.url, updated_secret.resource.url)
