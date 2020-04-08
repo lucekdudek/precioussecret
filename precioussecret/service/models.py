@@ -9,6 +9,9 @@ class Resource(models.Model):
     url = models.URLField(blank=True, null=True)
     file = models.FileField(blank=True, null=True)
 
+    def __str__(self):
+        return 'URL' if self.url else 'FILE'
+
 
 def generate_access_name():
     """Returns random uuid.
