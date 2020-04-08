@@ -1,9 +1,12 @@
 import base64
+import magic
 import requests
 
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
+from django.http import Http404
+from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.urls import reverse
 from django.utils.translation import ugettext as _
@@ -152,12 +155,25 @@ class AccessSecretView(generic.FormView):
             return self.form_invalid(form)
 
         try:
-            self.success_url = self.__access_secret_via_api(kwargs.get('access_name'), form.data.get('access_code'))
+            secret_data = self.__access_secret_via_api(kwargs.get('access_name'), form.data.get('access_code'))
         except ValidationError as e:
             form.add_error(field=None, error=e)
             return self.form_invalid(form)
 
-        return self.form_valid(form)
+        url = secret_data.get('resource').get('url')
+        if url:
+            self.success_url = url
+            return self.form_valid(form)
+
+        file_data = secret_data.get('resource').get('file')
+        if file_data:
+            decoded = base64.b64decode(file_data)
+            mime = magic.from_buffer(decoded, mime=True)
+            response = HttpResponse(decoded.read(), content_type=mime)
+            response['Content-Disposition'] = 'inline; filename={}'.format(kwargs.get('access_name'))
+            return response
+
+        raise Http404(_('Cannot access the secret'))
 
     def __access_secret_via_api(self, access_name, access_code):
         """Send request to API and returns secret
@@ -179,13 +195,12 @@ class AccessSecretView(generic.FormView):
             )
 
         secret_data = response.json()
-        secret_url = secret_data.get('resource')
         if not secret_data:
             raise ValidationError(
                 _('Unable to fetch secret data'),
                 code='api-missing-secret-data'
             )
-        return secret_url
+        return secret_data
 
     def get_success_url(self):
         """Return the URL to redirect to after processing a valid form.
