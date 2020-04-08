@@ -13,6 +13,7 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 
 from precioussecret.client.forms import AddSecretForm
+from precioussecret.client.forms import AccessSecretForm
 
 
 class LoginView(generic.FormView):
@@ -138,3 +139,55 @@ class SecretDetailsView(generic.TemplateView):
             return self.request.build_absolute_uri(
                 reverse('client:access-secret', kwargs={'access_name': access_name})
             )
+
+
+class AccessSecretView(generic.FormView):
+    template_name = 'access-secret.html'
+    form_class = AccessSecretForm
+    success_url = '/'
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if not form.is_valid():
+            return self.form_invalid(form)
+
+        try:
+            self.success_url = self.__access_secret_via_api(kwargs.get('access_name'), form.data.get('access_code'))
+        except ValidationError as e:
+            form.add_error(field=None, error=e)
+            return self.form_invalid(form)
+
+        return self.form_valid(form)
+
+    def __access_secret_via_api(self, access_name, access_code):
+        """Send request to API and returns secret
+        """
+        response = requests.put(
+            self.request.build_absolute_uri(reverse('service:access-secret-endpoint', kwargs={'access_name': access_name})),
+            json={
+                'access_code': access_code
+            },
+            headers={
+                'Content-type': 'application/json'
+            }
+        )
+        if response.status_code != status.HTTP_200_OK:
+            raise ValidationError(
+                _('Unable to access secret: %(value)s'),
+                code='api-secret-not-accessible',
+                params={'value': response.text},
+            )
+
+        secret_data = response.json()
+        secret_url = secret_data.get('resource')
+        if not secret_data:
+            raise ValidationError(
+                _('Unable to fetch secret data'),
+                code='api-missing-secret-data'
+            )
+        return secret_url
+
+    def get_success_url(self):
+        """Return the URL to redirect to after processing a valid form.
+        """
+        return str(self.success_url)
