@@ -1,5 +1,6 @@
 import base64
 import io
+import mimetypes
 
 import magic
 import requests
@@ -171,8 +172,9 @@ class AccessSecretView(generic.FormView):
             decoded = base64.b64decode(file_data)
             file = io.BytesIO(decoded)
             mime = magic.from_buffer(decoded, mime=True)
+            file_ext = mimetypes.guess_extension(mime)
             response = HttpResponse(file.read(), content_type=mime)
-            response['Content-Disposition'] = 'inline; filename={}'.format(kwargs.get('access_name'))
+            response['Content-Disposition'] = 'inline; filename={}{}'.format(kwargs.get('access_name'), file_ext)
             return response
 
         raise Http404(_('Cannot access the secret'))
