@@ -18,7 +18,11 @@
                         <a> - </a>
                         <a href="{% url 'client:add-secret' %}">Add Secret</a>
                         <a> - </a>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'client:logout' %}">Sign out</a>
+                        {% else %}
                         <a href="{% url 'client:login' %}">Sign in</a>
+                        {% endif %}
                     </div>
                     <hr class="mt-0 mb-4">
 
