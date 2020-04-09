@@ -6,6 +6,7 @@ import magic
 import requests
 
 from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.http import Http404
@@ -33,6 +34,13 @@ class LoginView(generic.FormView):
 
     def get_success_url(self):
         return reverse('client:home')
+
+
+class LogoutView(generic.RedirectView):
+
+    def get(self, request, *args, **kwargs):
+        logout(self.request)
+        return HttpResponseRedirect(reverse('client:login'))
 
 
 class HomeView(generic.TemplateView):
