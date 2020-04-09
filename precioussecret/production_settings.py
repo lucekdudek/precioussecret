@@ -131,7 +131,7 @@ LOGIN_URL = '/login/'
 VALID_FILE_EXTENSIONS = [
     '.txt', '.rtf', '.pdf', '.odt', '.doc', '.docx', '.ini',
     '.xls', '.xlsm', '.xlsx', '.ods', '.ppt', '.pptx', '.pps', '.odp', '.key',
-    '.tif', '.tiff', '.svg', '.png', '.jpeg', '.jpg', '.ico', '.gif', '.bmp', '.ai',
+    '.tif', '.tiff', '.svg', '.png', '.jpeg', '.jpg', '.jpe', '.ico', '.gif', '.bmp', '.ai',
     '.wmv', '.mpg', '.mpeg', '.mp4', '.mp3', '.mpa', '.wav', '.wma', '.wpl'
 ]
 
