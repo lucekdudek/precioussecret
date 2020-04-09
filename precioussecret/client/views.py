@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views import generic
@@ -149,7 +150,6 @@ class SecretDetailsView(generic.TemplateView):
 class AccessSecretView(generic.FormView):
     template_name = 'access-secret.html'
     form_class = AccessSecretForm
-    success_url = '/'
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -164,8 +164,7 @@ class AccessSecretView(generic.FormView):
 
         url = secret_data.get('resource').get('url')
         if url:
-            self.success_url = url
-            return self.form_valid(form)
+            return HttpResponseRedirect(url)
 
         file_data = secret_data.get('resource').get('file')
         if file_data:

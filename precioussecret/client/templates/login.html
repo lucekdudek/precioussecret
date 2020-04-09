@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}Precious Secret - Home{% endblock %}
+
+{% block Header %}Sign in{% endblock %}
 
 {% block content %}
 
-<h4>Sign in</h4>
-
 {% if user.is_authenticated %}
-    <p>You are signed in as {{ user.username }}!</p>
+    <p class="mt-2">You are signed in as {{ user.username }}!</p>
 {% else %}
-    <form method="post">
+    <form method="post" novalidate>
         {% csrf_token %}
-        {{ form }}
-        <input type="submit">
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">Submit</button>
     </form>
 {% endif %}
 
