@@ -43,7 +43,7 @@ class ResourceFileField(serializers.FileField):
 
         if file_ext not in settings.VALID_FILE_EXTENSIONS:
             raise serializers.ValidationError(
-                _('Invalid file extension')
+                _('Forbidden file extension')
             )
 
         file_name = "{0}{1}".format(uuid.uuid4(), file_ext)
