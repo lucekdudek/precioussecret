@@ -1,5 +1,6 @@
 import base64
 import io
+import mimetypes
 
 import magic
 import requests
@@ -10,6 +11,7 @@ from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views import generic
@@ -149,7 +151,6 @@ class SecretDetailsView(generic.TemplateView):
 class AccessSecretView(generic.FormView):
     template_name = 'access-secret.html'
     form_class = AccessSecretForm
-    success_url = '/'
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -164,16 +165,16 @@ class AccessSecretView(generic.FormView):
 
         url = secret_data.get('resource').get('url')
         if url:
-            self.success_url = url
-            return self.form_valid(form)
+            return HttpResponseRedirect(url)
 
         file_data = secret_data.get('resource').get('file')
         if file_data:
             decoded = base64.b64decode(file_data)
             file = io.BytesIO(decoded)
             mime = magic.from_buffer(decoded, mime=True)
+            file_ext = mimetypes.guess_extension(mime)
             response = HttpResponse(file.read(), content_type=mime)
-            response['Content-Disposition'] = 'inline; filename={}'.format(kwargs.get('access_name'))
+            response['Content-Disposition'] = 'inline; filename={}{}'.format(kwargs.get('access_name'), file_ext)
             return response
 
         raise Http404(_('Cannot access the secret'))
