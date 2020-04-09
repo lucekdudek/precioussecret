@@ -23,7 +23,7 @@ docker exec -it precioussecret_precious_1 bash
 
 # Inside container
 python manage.py migrate
-python createsuperuser
+python manage.py createsuperuser
 ```
 
 Run and call dev server  
