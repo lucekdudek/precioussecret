@@ -1,6 +1,8 @@
 # Precious Secret
 
-ToDo
+Precious Secret is a web app that can keep your secret URL of file.
+
+App comes with REST API which allow to add and access the secret and web client that will make the communication for you. 
 
 ## Getting Started
 
