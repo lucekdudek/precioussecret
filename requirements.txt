@@ -1,5 +1,5 @@
 django==3.0.5
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 requests==2.23.0
 python-magic==0.4.15
 django-crispy-forms==1.9.0
