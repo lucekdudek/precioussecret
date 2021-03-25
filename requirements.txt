@@ -3,7 +3,7 @@ djangorestframework==3.11.0
 requests==2.23.0
 python-magic==0.4.15
 django-crispy-forms==1.9.0
-pyyaml==5.3.1
+pyyaml==5.4
 ua-parser==0.10.0
 user-agents==2.1
 python-memcached==1.59
